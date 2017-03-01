@@ -1,0 +1,20 @@
+// Pascal script for "Town Tutorial"
+//
+// Notice:
+//   This file was made for teaching players the basics of Knights Province.
+//
+// Current map version: 1.0.6
+// Designed for: Knights Province Alpha 8
+//
+
+Title
+Town Tutorial
+
+Author
+Thibmo
+
+SmallDesc
+Town Tutorial for Knights Province
+
+BigDesc
+In this tutorial we will attempt to teach you the basics of Knights Province's town creation.
