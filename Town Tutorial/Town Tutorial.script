@@ -14,20 +14,15 @@ end;
 
 type TObjectiveSuccess = record
   // Training
-  School:              TObjectiveSuccess;
+  School:              TObjectiveStates;
   // Blanks
-  Cottage, Blanks:     TObjectiveSuccess;
+  Cottage, Blanks:     TObjectiveStates;
   // Basic supplies
-  Stone, Wood, Planks: TObjectiveSuccess;
+  Stone, Wood, Planks: TObjectiveStates;
   // Food
-  Fish, Cider, Tavern: TObjectiveSuccess;
+  Fish, Cider, Tavern: TObjectiveStates;
   // Store
-  Store:               TObjectiveSuccess;
-end;
-
-type TSquare = record
-  topLeft, topRight:       Integer;
-  bottomLeft, bottomRight: Integer;
+  Store:               TObjectiveStates;
 end;
 
 var
@@ -37,7 +32,7 @@ var
 procedure ShowMessage(aMsgIndex: Integer);
 begin
   if aMsgIndex = 100 then
-    fSecretDiscovered := True;
+    fDiscovered := True;
 
   Actions.OverlayTextSet(0, '<$' + IntToStr(aMsgIndex) + '>');
 end;
@@ -106,16 +101,16 @@ begin
 
   if (objSuccess.Cider.ID <> -1) and States.PlayerHouseCanBuild(0, htCiderMaker)      and
                                      (States.StatHouseTypeCount(0, htFisherHut) >= 1) then
-    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Cider, osActive);
+    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Cider.ID, osActive);
 
   if (objSuccess.Tavern.ID <> -1) and States.PlayerHouseCanBuild(0, htTavern)           and
                                       (States.StatHouseTypeCount(0, htCiderMaker) >= 1) then
-    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Tavern, osActive);
+    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Tavern.ID, osActive);
 
   // Store
   if (objSuccess.Store.ID <> -1) and States.PlayerHouseCanBuild(0, htStore)        and
-                                     (States.StatHouseTypeCount(0, htTavern) >= 1) then
-    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Store, osActive);
+                                     (States.StatHouseTypeCount(0, htTavern) >= 2) then
+    Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Store.ID, osActive);
 end;
 
 procedure CheckObjectives;
@@ -209,7 +204,7 @@ begin
     Actions.HouseAllow(0, htTavern,     True);
   end;
 
-  if (States.StatHouseTypeCount(0, htTavern) >= 1) and not objSuccess.Tavern.Done then
+  if (States.StatHouseTypeCount(0, htTavern) >= 2) and not objSuccess.Tavern.Done then
   begin
     Actions.PlayerObjectiveUpdateStatus(0, objSuccess.Tavern.ID, osCompleted);
     objSuccess.Tavern.ID   := -1;
@@ -232,22 +227,12 @@ begin
 end;
 
 procedure CheckSquare;
-var
-  unitsInSquare: TSquare;
 begin
-  if (not fSecretDiscovered) and (aTick mod 10 = 3)then
-  begin
-    unitsInSquare.topLeft     := States.UnitAt(61, 61);
-    unitsInSquare.topRight    := States.UnitAt(62, 61);
-    unitsInSquare.bottomLeft  := States.UnitAt(61, 62);
-    unitsInSquare.bottomRight := States.UnitAt(62, 62);
-
-    if (unitsInSquare.topLeft     <> -1) or
-       (unitsInSquare.topRight    <> -1) or
-       (unitsInSquare.bottomLeft  <> -1) or
-       (unitsInSquare.bottomRight <> -1)) then
-      ShowMessage(100);
-  end;
+  if (States.UnitAt(61, 61) > 0) or
+     (States.UnitAt(62, 61) > 0) or
+     (States.UnitAt(61, 62) > 0) or
+     (States.UnitAt(62, 62) > 0) then
+    ShowMessage(100);
 end;
 
 // Disable construction of the houses used during this map,
@@ -306,7 +291,7 @@ begin
     if aTick mod 10 = 6 then
       CheckVictory;
 
-    if aTick mod 10 = 9 then
+    if (not fDiscovered) and (aTick mod 10 = 9) then
       CheckSquare;
   end;
 end;
