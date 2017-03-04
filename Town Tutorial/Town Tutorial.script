@@ -89,12 +89,13 @@ begin
     Actions.PlayerObjectiveUpdateStatus(HUMAN_PLAYER, objSuccess.Wood.ID, osActive);
 
   if (objSuccess.Planks.ID <> -1) and States.PlayerHouseCanBuild(HUMAN_PLAYER, htSawmill)           and
-                                      (States.StatHouseTypeCount(HUMAN_PLAYER, htWoodcutters) >= 1) then
+                                      (States.StatHouseTypeCount(HUMAN_PLAYER, htStonecutters) >= 2) then
     Actions.PlayerObjectiveUpdateStatus(HUMAN_PLAYER, objSuccess.Planks.ID, osActive);
 
   // Food
-  if (objSuccess.Tavern.ID <> -1) and States.PlayerHouseCanBuild(HUMAN_PLAYER, htTavern)        and
-                                      (States.StatHouseTypeCount(HUMAN_PLAYER, htSawmill) >= 1) then
+  if (objSuccess.Tavern.ID <> -1) and States.PlayerHouseCanBuild(HUMAN_PLAYER, htTavern)            and
+                                      (States.StatHouseTypeCount(HUMAN_PLAYER, htWoodcutters) >= 1) and
+                                      (States.StatHouseTypeCount(HUMAN_PLAYER, htSawmill)     >= 1) then
     Actions.PlayerObjectiveUpdateStatus(HUMAN_PLAYER, objSuccess.Tavern.ID, osActive);
 
   if (objSuccess.Fish.ID <> -1) and States.PlayerHouseCanBuild(HUMAN_PLAYER, htFisherHut)    and
@@ -147,6 +148,7 @@ begin
     ShowMessage(3);
     Actions.HouseAllow(HUMAN_PLAYER, htStonecutters, False);
     Actions.HouseAllow(HUMAN_PLAYER, htWoodcutters,  True);
+    Actions.HouseAllow(HUMAN_PLAYER, htSawmill,      True);
   end;
 
   if (States.StatHouseTypeCount(HUMAN_PLAYER, htWoodcutters) >= 1) and not objSuccess.Wood.Done then
@@ -156,7 +158,12 @@ begin
     objSuccess.Wood.Done := True;
 
     Actions.HouseAllow(HUMAN_PLAYER, htWoodcutters, False);
-    Actions.HouseAllow(HUMAN_PLAYER, htSawmill,     True);
+
+    if objSuccess.Planks.Done then
+    begin
+      ShowMessage(4);
+      Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
+    end;
   end;
 
   if (States.StatHouseTypeCount(HUMAN_PLAYER, htSawmill) >= 1) and not objSuccess.Planks.Done then
@@ -165,9 +172,13 @@ begin
     objSuccess.Planks.ID   := -1;
     objSuccess.Planks.Done := True;
 
-    ShowMessage(4);
-    Actions.HouseAllow(HUMAN_PLAYER, htSawmill,   False);
-    Actions.HouseAllow(HUMAN_PLAYER, htTavern,     True);
+    Actions.HouseAllow(HUMAN_PLAYER, htSawmill, False);
+
+    if objSuccess.Wood.Done then
+    begin
+      ShowMessage(4);
+      Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
+    end;
   end;
 
   // Food
@@ -196,7 +207,7 @@ begin
     if objSuccess.Cider.Done then
     begin
       ShowMessage(6);
-      Actions.HouseAllow(HUMAN_PLAYER, htStore,  True);
+      Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
 
@@ -211,7 +222,7 @@ begin
     if objSuccess.Fish.Done then
     begin
       ShowMessage(6);
-      Actions.HouseAllow(HUMAN_PLAYER, htStore,  True);
+      Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
 
@@ -234,7 +245,7 @@ begin
        (States.UnitAt(62, 61) > 0) or
        (States.UnitAt(61, 62) > 0) or
        (States.UnitAt(62, 62) > 0) then
-         ShowMessage(100);
+      ShowMessage(100);
 end;
 
 procedure FeedUnits(aTick: Integer);
