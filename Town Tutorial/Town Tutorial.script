@@ -8,8 +8,7 @@
 //
 
 const
-  FOOD_INTERVAL = 10 * 60 * 10; // ~10 minutes
-  HUMAN_PLAYER  = 0;
+  HUMAN_PLAYER = 0;
 
 type TObjectiveStates = record
   Done: Boolean;
@@ -30,7 +29,6 @@ end;
 var
   objSuccess:  TObjectiveSuccess;
   fDiscovered: Boolean;
-  fStartTime:  Integer;
 
 procedure ShowMessage(aMsgIndex: Integer);
 begin
@@ -248,16 +246,15 @@ begin
       ShowMessage(100);
 end;
 
-procedure FeedUnits(aTick: Integer);
+procedure FeedUnits;
 var
   I:               Integer;
   PlayerUnitArray: array of Integer;
 begin
-  fStartTime      := aTick;
   PlayerUnitArray := States.PlayerGetAllUnits(HUMAN_PLAYER);
 
   for I := 0 to Length(PlayerUnitArray) - 1 do
-    Actions.UnitHungerSet(PlayerUnitArray[I], States.UnitHungerMax / 2); // 50% hunger should be fine
+    Actions.UnitHungerSet(PlayerUnitArray[I], States.UnitHungerMax);
 end;
 
 // Disable construction of the houses used during this map,
@@ -297,7 +294,7 @@ begin
   BlockHouses;
   SetMissionStartValues;
   UpdateObjectivesStatus;
-  FeedUnits(0);
+  FeedUnits;
 
   ShowMessage(0);
 end;
@@ -309,16 +306,16 @@ begin
     if aTick mod 10 = 0 then
       UpdateObjectivesStatus;
 
-    if aTick mod 10 = 3 then
+    if aTick mod 10 = 2 then
       CheckObjectives;
 
-    if aTick mod 10 = 6 then
+    if aTick mod 10 = 4 then
       CheckVictory;
 
-    if ((aTick - fStartTime) >= FOOD_INTERVAL) and (not objSuccess.Wood.Done) then
-      FeedUnits(aTick);
+    if (not objSuccess.Wood.Done) and (aTick mod 10 = 6) then
+      FeedUnits;
   end;
 
-  if aTick mod 10 = 9 then
+  if aTick mod 10 = 8 then
     CheckSquare;
 end;
