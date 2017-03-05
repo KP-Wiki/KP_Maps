@@ -30,14 +30,20 @@ var
   objSuccess:  TObjectiveSuccess;
   fDiscovered: Boolean;
 
-procedure ShowMessage(aMsgIndex: Integer);
+procedure ShowMessage(aOverlayID, aPopupID: Integer);
 begin
-  if aMsgIndex = 100 then
+  if aOverlayID = 100 then
   begin
     fDiscovered := True;
-    Actions.OverlayTextSet(HUMAN_PLAYER, '[$EAEAEA]Why are your units even in this area? O.o[]');
+    Actions.PlayerOverlaySet(HUMAN_PLAYER, '[$EAEAEA]Why are your units even in this area? O.o[]');
   end else
-    Actions.OverlayTextSet(HUMAN_PLAYER, '<$' + IntToStr(aMsgIndex) + '>');
+  begin
+    if (aOverlayID <> -1) then
+      Actions.PlayerOverlaySet(HUMAN_PLAYER, '<$' + IntToStr(aOverlayID) + '>');
+
+    if (aPopupID <> -1) then
+      Actions.PlayerMessage(HUMAN_PLAYER, '<$' + IntToStr(aPopupID) + '>');
+  end;
 end;
 
 procedure CheckVictory;
@@ -120,7 +126,7 @@ begin
     objSuccess.School.ID   := -1;
     objSuccess.School.Done := True;
 
-    ShowMessage(1);
+    ShowMessage(1, 11);
     Actions.HouseAllow(HUMAN_PLAYER, htSchool,  False);
     Actions.HouseAllow(HUMAN_PLAYER, htCottage, True);
   end;
@@ -131,7 +137,7 @@ begin
     objSuccess.Cottage.ID   := -1;
     objSuccess.Cottage.Done := True;
 
-    ShowMessage(2);
+    ShowMessage(2, 12);
     Actions.HouseAllow(HUMAN_PLAYER, htCottage, False);
     Actions.HouseAllow(HUMAN_PLAYER, htStonecutters, True);
   end;
@@ -143,7 +149,7 @@ begin
     objSuccess.Stone.ID   := -1;
     objSuccess.Stone.Done := True;
 
-    ShowMessage(3);
+    ShowMessage(3, 13);
     Actions.HouseAllow(HUMAN_PLAYER, htStonecutters, False);
     Actions.HouseAllow(HUMAN_PLAYER, htWoodcutters,  True);
     Actions.HouseAllow(HUMAN_PLAYER, htSawmill,      True);
@@ -159,7 +165,7 @@ begin
 
     if objSuccess.Planks.Done then
     begin
-      ShowMessage(4);
+      ShowMessage(4, 14);
       Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
     end;
   end;
@@ -174,7 +180,7 @@ begin
 
     if objSuccess.Wood.Done then
     begin
-      ShowMessage(4);
+      ShowMessage(4, 14);
       Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
     end;
   end;
@@ -186,7 +192,7 @@ begin
     objSuccess.Tavern.ID   := -1;
     objSuccess.Tavern.Done := True;
 
-    ShowMessage(5);
+    ShowMessage(5, 15);
     Actions.HouseAllow(HUMAN_PLAYER, htTavern, False);
     Actions.HouseUnlock(HUMAN_PLAYER, htFisherHut);
     Actions.HouseUnlock(HUMAN_PLAYER, htCiderMaker);
@@ -204,7 +210,7 @@ begin
 
     if objSuccess.Cider.Done then
     begin
-      ShowMessage(6);
+      ShowMessage(6, 16);
       Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
@@ -219,7 +225,7 @@ begin
 
     if objSuccess.Fish.Done then
     begin
-      ShowMessage(6);
+      ShowMessage(6, 16);
       Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
@@ -231,7 +237,7 @@ begin
     objSuccess.Store.ID   := -1;
     objSuccess.Store.Done := True;
 
-    ShowMessage(7);
+    ShowMessage(7, 17);
     Actions.HouseAllow(HUMAN_PLAYER, htStore, False);
   end;
 end;
@@ -243,7 +249,7 @@ begin
        (States.UnitAt(62, 61) > 0) or
        (States.UnitAt(61, 62) > 0) or
        (States.UnitAt(62, 62) > 0) then
-      ShowMessage(100);
+      ShowMessage(100, -1);
 end;
 
 procedure FeedUnits;
@@ -296,7 +302,7 @@ begin
   UpdateObjectivesStatus;
   FeedUnits;
 
-  ShowMessage(0);
+  ShowMessage(0, 10);
 end;
 
 procedure OnTick(aTick: Integer);
