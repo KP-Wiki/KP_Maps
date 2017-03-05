@@ -237,7 +237,7 @@ begin
     objSuccess.Store.ID   := -1;
     objSuccess.Store.Done := True;
 
-    ShowMessage(7, 17);
+    ShowMessage(7, -1);
     Actions.HouseAllow(HUMAN_PLAYER, htStore, False);
   end;
 end;
