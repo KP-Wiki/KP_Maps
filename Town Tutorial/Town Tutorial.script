@@ -126,7 +126,7 @@ begin
     objSuccess.School.ID   := -1;
     objSuccess.School.Done := True;
 
-    ShowMessage(1, 11);
+    ShowMessage(11, 21);
     Actions.HouseAllow(HUMAN_PLAYER, htSchool,  False);
     Actions.HouseAllow(HUMAN_PLAYER, htCottage, True);
   end;
@@ -137,7 +137,7 @@ begin
     objSuccess.Cottage.ID   := -1;
     objSuccess.Cottage.Done := True;
 
-    ShowMessage(2, 12);
+    ShowMessage(12, 22);
     Actions.HouseAllow(HUMAN_PLAYER, htCottage, False);
     Actions.HouseAllow(HUMAN_PLAYER, htStonecutters, True);
   end;
@@ -149,7 +149,7 @@ begin
     objSuccess.Stone.ID   := -1;
     objSuccess.Stone.Done := True;
 
-    ShowMessage(3, 13);
+    ShowMessage(13, 23);
     Actions.HouseAllow(HUMAN_PLAYER, htStonecutters, False);
     Actions.HouseAllow(HUMAN_PLAYER, htWoodcutters,  True);
     Actions.HouseAllow(HUMAN_PLAYER, htSawmill,      True);
@@ -165,7 +165,7 @@ begin
 
     if objSuccess.Planks.Done then
     begin
-      ShowMessage(4, 14);
+      ShowMessage(14, 24);
       Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
     end;
   end;
@@ -180,7 +180,7 @@ begin
 
     if objSuccess.Wood.Done then
     begin
-      ShowMessage(4, 14);
+      ShowMessage(14, 24);
       Actions.HouseAllow(HUMAN_PLAYER, htTavern, True);
     end;
   end;
@@ -192,7 +192,7 @@ begin
     objSuccess.Tavern.ID   := -1;
     objSuccess.Tavern.Done := True;
 
-    ShowMessage(5, 15);
+    ShowMessage(15, 25);
     Actions.HouseAllow(HUMAN_PLAYER, htTavern, False);
     Actions.HouseUnlock(HUMAN_PLAYER, htFisherHut);
     Actions.HouseUnlock(HUMAN_PLAYER, htCiderMaker);
@@ -210,7 +210,7 @@ begin
 
     if objSuccess.Cider.Done then
     begin
-      ShowMessage(6, 16);
+      ShowMessage(16, 26);
       Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
@@ -225,7 +225,7 @@ begin
 
     if objSuccess.Fish.Done then
     begin
-      ShowMessage(6, 16);
+      ShowMessage(16, 26);
       Actions.HouseAllow(HUMAN_PLAYER, htStore, True);
     end;
   end;
@@ -237,7 +237,7 @@ begin
     objSuccess.Store.ID   := -1;
     objSuccess.Store.Done := True;
 
-    ShowMessage(7, -1);
+    ShowMessage(17, -1);
     Actions.HouseAllow(HUMAN_PLAYER, htStore, False);
   end;
 end;
@@ -281,18 +281,18 @@ end;
 procedure SetMissionStartValues;
 begin
   // Units
-  objSuccess.School.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 1, osHidden, '<$20>');
-  objSuccess.Cottage.ID := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 2, osHidden, '<$21>');
+  objSuccess.School.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 1, osHidden, '<$30>');
+  objSuccess.Cottage.ID := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 2, osHidden, '<$31>');
   // Basic supplies
-  objSuccess.Stone.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 3, osHidden, '<$22>');
-  objSuccess.Wood.ID    := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 4, osHidden, '<$23>');
-  objSuccess.Planks.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 5, osHidden, '<$24>');
+  objSuccess.Stone.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 3, osHidden, '<$32>');
+  objSuccess.Wood.ID    := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 4, osHidden, '<$33>');
+  objSuccess.Planks.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 5, osHidden, '<$34>');
   // Food
-  objSuccess.Tavern.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 6, osHidden, '<$25>');
-  objSuccess.Fish.ID    := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 7, osHidden, '<$26>');
-  objSuccess.Cider.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 8, osHidden, '<$27>');
+  objSuccess.Tavern.ID  := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 6, osHidden, '<$35>');
+  objSuccess.Fish.ID    := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 7, osHidden, '<$36>');
+  objSuccess.Cider.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 8, osHidden, '<$37>');
   // Store
-  objSuccess.Store.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 9, osHidden, '<$28>');
+  objSuccess.Store.ID   := Actions.PlayerObjectiveAdd(HUMAN_PLAYER, otMain, 9, osHidden, '<$38>');
 end;
 
 procedure OnMissionStart;
@@ -302,7 +302,7 @@ begin
   UpdateObjectivesStatus;
   FeedUnits;
 
-  ShowMessage(0, 10);
+  ShowMessage(10, 20);
 end;
 
 procedure OnTick(aTick: Integer);
